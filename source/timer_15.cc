@@ -17,7 +17,7 @@ void Timer15::hardware_init(int period_us){
 	TIM_TimeBaseInitTypeDef myTimer;
 	TIM_TimeBaseStructInit(&myTimer);
 	myTimer.TIM_CounterMode=TIM_CounterMode_Down;
-	myTimer.TIM_Prescaler=(64-1);//CountFreq=(64MHz/Prescaler+1)=1MHz
+	myTimer.TIM_Prescaler=((SystemCoreClock/1000000)-1);//CountFreq=(64MHz/Prescaler+1)=1MHz
 	myTimer.TIM_ClockDivision=TIM_CKD_DIV1;
 	myTimer.TIM_Period=period_us;
 	TIM_TimeBaseInit(TIM15,&myTimer);
