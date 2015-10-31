@@ -2,24 +2,40 @@
 #include "timer_15.h"
 #include "Clock.h"
 #include "timedclock.h"
+#include "ctimers_stmf3.h"
+#include "stm32f30x.h"                  // Device header
 
-void delay_ms(int delay_time){
-	for(int i = 0; i < delay_time; i++){
-	}
-}
+void led_init(void);
 
 int main(){
 	//System configuration
-	Time myTime(15,4,5,0);
-	TimedClock clock(myTime);
-	Timer15 timer15(1000, clock);
-	Serial_stream* serial = new SerialUSART2(9600);
-
+	led_init();
+	timer2_init(500,0);
+	timer2_start();
 	//User application
-	serial->printf("Hello World\n");
-	while(1){
-		clock.getTime(myTime);
-		serial->printf("Hora = %02d:%02d:%02d\n", myTime.hours, myTime.minutes, myTime.seconds);
-		delay_ms(0x8FFFF);
+	while(1);
+}
+
+void led_init(void){
+	//Turn on the GPIOB peripherial
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+	//Configure PB13  as push pull ouput an set the output to high 
+	GPIOB->MODER &=~(GPIO_MODER_MODER13);
+	GPIOB->MODER |=GPIO_MODER_MODER13_0;//output
+	GPIOB->ODR |= GPIO_ODR_13;
+}
+
+void led_flip(void){
+	static int lastVal = 0;
+	if(lastVal == 0){
+		lastVal = 1;
+		GPIO_WriteBit(GPIOB,GPIO_Pin_13,Bit_RESET);
+	}else{
+		lastVal = 0;
+		GPIO_WriteBit(GPIOB,GPIO_Pin_13,Bit_SET);
 	}
+}
+
+void timer2_callback(void){
+	led_flip();
 }
