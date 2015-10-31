@@ -7,7 +7,7 @@ OUTPUT_EXEC:= salida.elf
 #All the dtandard peripherial library files
 SPL_FILES:= $(notdir $(wildcard ../STM32F30x_StdPeriph_Driver/src/*.c ))
 
-C_SOURCE_FILES:= system_stm32f30x.c $(SPL_FILES)
+C_SOURCE_FILES:= system_stm32f30x.c $(SPL_FILES) ctimers_stm32f3.c
 CXX_SOURCE_FILES:= main.cc serial_stream.cc serial_stream_stm32f3.cc  timer.cc timer_15.cc Clock.cc timedclock.cc
 ASM_SOURCE_FILES:= startup_ARMCM4.S
 LINKER_FILES:=
@@ -25,8 +25,8 @@ USER_CPP_FLAGS:=
 USER_DEFINES:= USE_STDPERIPH_DRIVER
 USER_ASM_FLAGS:= -std=c99
 USER_C_FLAGS:= -std=c99
-USER_CXX_FLAGS:= -std=c++11 -Os -flto
-USER_LINKER_FLAGS:=-std=c++11 -Wl,--gc-sections -specs=nano.specs --specs=nosys.specs -Os -flto
+USER_CXX_FLAGS:= -std=c++11 -O1 -flto
+USER_LINKER_FLAGS:=-std=c++11 -Wl,--gc-sections -specs=nano.specs --specs=nosys.specs -O1 -flto
 
 CPP_DEFINES:= $(TARGET_CHIP) $(USER_DEFINES)
 CPP_DEFINE_FLAGS:=$(patsubst %,-D%,$(CPP_DEFINES))
