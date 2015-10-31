@@ -4,9 +4,9 @@
 void timer2_init(int period,int use_us){
 	int prescaler = 0;
 	SystemCoreClockUpdate();
-	
+
 	prescaler = use_us ? ((SystemCoreClock/1000000)-1) : ((SystemCoreClock/1000)-1); //CountFreq=(CoreClock/Prescaler+1)
-	
+
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
 	TIM_TimeBaseInitTypeDef myTimer;
 	TIM_TimeBaseStructInit(&myTimer);
@@ -15,9 +15,9 @@ void timer2_init(int period,int use_us){
 	myTimer.TIM_ClockDivision=TIM_CKD_DIV1;
 	myTimer.TIM_Period=period;
 	TIM_TimeBaseInit(TIM2,&myTimer);
-	
+
 	TIM_InternalClockConfig(TIM2);
-	
+
 	TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
 	NVIC_EnableIRQ(TIM2_IRQn);
 }
